@@ -12,7 +12,7 @@ ENV PATH=${PATH}:${NODE_PATH}/bin
 RUN amazon-linux-extras install -y docker && yum clean all
 
 # install need package
-RUN yum install -y gcc gcc-c++ make tar xz which unzip java git patch awscli jq && yum clean all
+RUN yum install -y gcc gcc-c++ make tar xz which unzip java git patch awscli jq python3 && yum clean all
 
 # install bazel
 RUN curl -L -o bazel.sh ${BAZEL_PACKAGE} && chmod +x bazel.sh && ./bazel.sh && rm bazel.sh && echo -e 'cat >> ~/.bashrc <<EOF\nif [ -f "$HOME/.bazel/bin/bazel-complete.bash" ]; then\n . $HOME/.bazel/bin/bazel-complete.bash\nfi\nEOF\ntrue' | bash
