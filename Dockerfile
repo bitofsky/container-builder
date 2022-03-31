@@ -4,7 +4,7 @@ ENV NODE_PACKAGE https://nodejs.org/dist/v16.13.2/node-v16.13.2-linux-x64.tar.xz
 ENV NODE_PATH /opt/node
 
 ENV YARN_VERSION 1.22.4
-ENV BAZEL_PACKAGE https://github.com/bazelbuild/bazel/releases/download/4.0.0/bazel-4.0.0-installer-linux-x86_64.sh
+ENV BAZEL_PACKAGE https://github.com/bazelbuild/bazel/releases/download/5.1.0/bazel-5.1.0-installer-linux-x86_64.sh
 
 ENV PATH=${PATH}:${NODE_PATH}/bin
 
