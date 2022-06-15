@@ -6,7 +6,7 @@ ENV NODE_PATH /opt/node
 ENV YARN_VERSION 1.22.4
 ENV BAZEL_PACKAGE https://github.com/bazelbuild/bazel/releases/download/5.1.0/bazel-5.1.0-installer-linux-x86_64.sh
 
-ENV PATH=${PATH}:${NODE_PATH}/bin
+ENV PATH=${PATH}:${NODE_PATH}/bin:/usr/bin
 
 # install docker
 RUN amazon-linux-extras install -y docker && yum clean all
@@ -20,3 +20,5 @@ RUN curl -L -o bazel.sh ${BAZEL_PACKAGE} && chmod +x bazel.sh && ./bazel.sh && r
 # install node
 RUN mkdir -p ${NODE_PATH} && curl ${NODE_PACKAGE} | tar xvfJ - -C ${NODE_PATH} --strip-components=1 && npm i -g yarn@${YARN_VERSION}
 
+# get kaniko binary from official image
+COPY --from=gcr.io/kaniko-project/executor:v1.8.1-debug /kaniko/executor /usr/bin/kaniko
