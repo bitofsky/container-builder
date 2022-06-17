@@ -22,5 +22,5 @@ RUN mkdir -p ${NODE_PATH} && curl ${NODE_PACKAGE} | tar xvfJ - -C ${NODE_PATH} -
 
 # install genuinetools/img for containerize without privileged
 RUN curl -fSL "https://github.com/genuinetools/img/releases/download/v0.5.11/img-linux-amd64" -o "/usr/local/bin/img" \
-	&& echo "${IMG_SHA256}  /usr/local/bin/img" | sha256sum -c - \
+	&& echo "cc9bf08794353ef57b400d32cd1065765253166b0a09fba360d927cfbd158088  /usr/local/bin/img" | sha256sum -c - \
 	&& chmod a+x "/usr/local/bin/img"
