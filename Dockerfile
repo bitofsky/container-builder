@@ -15,10 +15,12 @@ RUN amazon-linux-extras install -y docker && yum clean all
 RUN yum install -y gcc gcc-c++ make tar xz which unzip java git patch awscli jq python3 && yum clean all
 
 # install bazel
-RUN curl -L -o bazel.sh ${BAZEL_PACKAGE} && chmod +x bazel.sh && ./bazel.sh && rm bazel.sh && echo -e 'cat >> ~/.bashrc <<EOF\nif [ -f "$HOME/.bazel/bin/bazel-complete.bash" ]; then\n . $HOME/.bazel/bin/bazel-complete.bash\nfi\nEOF\ntrue' | bash
+RUN curl -L -o bazel.sh ${BAZEL_PACKAGE} && chmod +x bazel.sh && ./bazel.sh && rm bazel.sh
 
 # install node
 RUN mkdir -p ${NODE_PATH} && curl ${NODE_PACKAGE} | tar xvfJ - -C ${NODE_PATH} --strip-components=1 && npm i -g yarn@${YARN_VERSION}
 
-# get kaniko binary from official image
-COPY --from=gcr.io/kaniko-project/executor:v1.8.1-debug /kaniko/executor /usr/bin/kaniko
+# install genuinetools/img for containerize without privileged
+RUN curl -fSL "https://github.com/genuinetools/img/releases/download/v0.5.11/img-linux-amd64" -o "/usr/local/bin/img" \
+	&& echo "${IMG_SHA256}  /usr/local/bin/img" | sha256sum -c - \
+	&& chmod a+x "/usr/local/bin/img"
