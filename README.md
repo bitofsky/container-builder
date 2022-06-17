@@ -6,4 +6,4 @@ Includes:
 - Yarn 1.22.4
 - Node.js 16.4.2
 - docker gcc gcc-c++ make tar xz which unzip java git patch awscli jq
-- kaniko v1.8.1
+- genuinetools/img v0.5.11
