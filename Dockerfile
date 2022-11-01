@@ -1,4 +1,4 @@
-FROM amazonlinux:2
+FROM amazonlinux:2022.0.20221019.4
 
 ENV NODE_PACKAGE https://nodejs.org/dist/v18.12.0/node-v18.12.0-linux-x64.tar.xz
 ENV NODE_PATH /opt/node
@@ -7,9 +7,6 @@ ENV YARN_VERSION 1.22.4
 ENV BAZEL_PACKAGE https://github.com/bazelbuild/bazel/releases/download/5.1.0/bazel-5.1.0-installer-linux-x86_64.sh
 
 ENV PATH=${PATH}:${NODE_PATH}/bin:/usr/bin
-
-# install docker
-RUN amazon-linux-extras install -y docker && yum clean all
 
 # install need package
 RUN yum install -y gcc gcc-c++ make tar xz which unzip java git patch awscli jq python3 && yum clean all

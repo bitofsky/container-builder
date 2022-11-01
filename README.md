@@ -1,7 +1,7 @@
 Container Image for Bazel Build
 ===============================
 Includes:
-- amazonlinux:2
+- amazonlinux:2022
 - Bazel 5.1.0
 - Yarn 1.22.4
 - Node.js 18.12.0
