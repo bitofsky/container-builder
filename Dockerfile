@@ -1,6 +1,6 @@
 FROM amazonlinux:2
 
-ENV NODE_PACKAGE https://nodejs.org/dist/v16.13.2/node-v16.13.2-linux-x64.tar.xz
+ENV NODE_PACKAGE https://nodejs.org/dist/v18.12.0/node-v18.12.0-linux-x64.tar.xz
 ENV NODE_PATH /opt/node
 
 ENV YARN_VERSION 1.22.4
