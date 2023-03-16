@@ -5,6 +5,7 @@ ENV NODE_PATH /opt/node
 
 ENV PNPM_VERSION 7.29.0
 ENV TURBO_VERSION 1.8.3
+ENV TSX_VERSION 3.12.5
 ENV BAZEL_PACKAGE https://github.com/bazelbuild/bazel/releases/download/5.1.0/bazel-5.1.0-installer-linux-x86_64.sh
 
 ENV PATH=${PATH}:${NODE_PATH}/bin:/usr/bin
@@ -16,7 +17,7 @@ RUN yum install -y gcc gcc-c++ make tar xz which unzip java git patch awscli jq 
 RUN curl -L -o bazel.sh ${BAZEL_PACKAGE} && chmod +x bazel.sh && ./bazel.sh && rm bazel.sh
 
 # install node
-RUN mkdir -p ${NODE_PATH} && curl ${NODE_PACKAGE} | tar xvfJ - -C ${NODE_PATH} --strip-components=1 && npm i -g pnpm@${PNPM_VERSION} turbo@${TURBO_VERSION}
+RUN mkdir -p ${NODE_PATH} && curl ${NODE_PACKAGE} | tar xvfJ - -C ${NODE_PATH} --strip-components=1 && npm i -g pnpm@${PNPM_VERSION} turbo@${TURBO_VERSION} tsx@${TSX_VERSION}
 
 # install genuinetools/img for containerize without privileged
 RUN curl -fSL "https://github.com/genuinetools/img/releases/download/v0.5.11/img-linux-amd64" -o "/usr/bin/img" \
