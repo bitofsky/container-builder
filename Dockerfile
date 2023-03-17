@@ -24,6 +24,14 @@ RUN curl -fSL "https://github.com/genuinetools/img/releases/download/v0.5.11/img
 	&& echo "cc9bf08794353ef57b400d32cd1065765253166b0a09fba360d927cfbd158088  /usr/bin/img" | sha256sum -c - \
 	&& chmod a+x "/usr/bin/img"
 
+RUN curl -L https://github.com/moby/buildkit/releases/download/v0.11.4/buildkit-v0.11.4.linux-amd64.tar.gz -O /tmp/buildkit.tar.gz \
+    && mkdir -p /tmp/buildkit \
+    && tar -C /tmp/buildkit -xzf /tmp/buildkit.tar.gz \
+    && mv /tmp/buildkit/bin/buildctl /usr/bin/buildctl \
+    && chmod a+x /usr/bin/buildctl \
+    && rm -rf /tmp/buildkit \
+    && rm /tmp/buildkit.tar.gz
+
 RUN curl -L "https://dl.k8s.io/release/v1.20.15/bin/linux/amd64/kubectl" -o "/usr/bin/kubectl-v1.20"
 RUN curl -L "https://dl.k8s.io/release/v1.21.14/bin/linux/amd64/kubectl" -o "/usr/bin/kubectl-v1.21"
 RUN curl -L "https://dl.k8s.io/release/v1.22.12/bin/linux/amd64/kubectl" -o "/usr/bin/kubectl-v1.22"
