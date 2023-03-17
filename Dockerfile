@@ -24,7 +24,7 @@ RUN curl -fSL "https://github.com/genuinetools/img/releases/download/v0.5.11/img
 	&& echo "cc9bf08794353ef57b400d32cd1065765253166b0a09fba360d927cfbd158088  /usr/bin/img" | sha256sum -c - \
 	&& chmod a+x "/usr/bin/img"
 
-RUN curl -L https://github.com/moby/buildkit/releases/download/v0.11.4/buildkit-v0.11.4.linux-amd64.tar.gz -O /tmp/buildkit.tar.gz \
+RUN curl -L "https://github.com/moby/buildkit/releases/download/v0.11.4/buildkit-v0.11.4.linux-amd64.tar.gz" -o /tmp/buildkit.tar.gz \
     && mkdir -p /tmp/buildkit \
     && tar -C /tmp/buildkit -xzf /tmp/buildkit.tar.gz \
     && mv /tmp/buildkit/bin/buildctl /usr/bin/buildctl \
