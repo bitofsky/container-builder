@@ -1,23 +1,26 @@
-FROM amazonlinux:2022.0.20221019.4
+FROM node:18.12.0-slim
 
-ENV NODE_PACKAGE https://nodejs.org/dist/v18.12.0/node-v18.12.0-linux-x64.tar.xz
-ENV NODE_PATH /opt/node
-
+ENV DEBIAN_FRONTEND noninteractive
 ENV PNPM_VERSION 7.29.0
 ENV TURBO_VERSION 1.8.3
 ENV TSX_VERSION 3.12.5
-ENV BAZEL_PACKAGE https://github.com/bazelbuild/bazel/releases/download/5.1.0/bazel-5.1.0-installer-linux-x86_64.sh
 
-ENV PATH=${PATH}:${NODE_PATH}/bin:/usr/bin
+RUN apt-get update -y && \
+    apt-get install -y --no-install-recommends \
+        software-properties-common \
+        ca-certificates \
+        build-essential \
+        wget \
+        jq \
+        patch \
+        awscli \
+        python3 \
+        curl \
+        git && \
+    apt-get clean
 
-# install need package
-RUN yum install -y gcc gcc-c++ make tar xz which unzip java git patch awscli jq python3 && yum clean all
-
-# install bazel
-RUN curl -L -o bazel.sh ${BAZEL_PACKAGE} && chmod +x bazel.sh && ./bazel.sh && rm bazel.sh
-
-# install node
-RUN mkdir -p ${NODE_PATH} && curl ${NODE_PACKAGE} | tar xvfJ - -C ${NODE_PATH} --strip-components=1 && npm i -g pnpm@${PNPM_VERSION} turbo@${TURBO_VERSION} tsx@${TSX_VERSION}
+# install node packages
+RUN npm i -g pnpm@${PNPM_VERSION} turbo@${TURBO_VERSION} tsx@${TSX_VERSION}
 
 # install genuinetools/img for containerize without privileged
 RUN curl -fSL "https://github.com/genuinetools/img/releases/download/v0.5.11/img-linux-amd64" -o "/usr/bin/img" \
@@ -32,6 +35,7 @@ RUN curl -L "https://github.com/moby/buildkit/releases/download/v0.11.4/buildkit
     && rm -rf /tmp/buildkit \
     && rm /tmp/buildkit.tar.gz
 
+# install kubectl
 RUN curl -L "https://dl.k8s.io/release/v1.20.15/bin/linux/amd64/kubectl" -o "/usr/bin/kubectl-v1.20"
 RUN curl -L "https://dl.k8s.io/release/v1.21.14/bin/linux/amd64/kubectl" -o "/usr/bin/kubectl-v1.21"
 RUN curl -L "https://dl.k8s.io/release/v1.22.12/bin/linux/amd64/kubectl" -o "/usr/bin/kubectl-v1.22"
@@ -41,3 +45,9 @@ RUN curl -L "https://dl.k8s.io/release/v1.25.7/bin/linux/amd64/kubectl" -o "/usr
 RUN curl -L "https://dl.k8s.io/release/v1.26.2/bin/linux/amd64/kubectl" -o "/usr/bin/kubectl-v1.26" && chmod a+x /usr/bin/kubectl*
 
 RUN ln -s /usr/bin/kubectl-v1.24 /usr/bin/kubectl
+
+# install golang
+COPY --from=golang:1.20.2-alpine /usr/local/go/ /usr/local/go/
+ENV GOPATH /go
+ENV PATH $GOPATH/bin:/usr/local/go/bin:${PATH}
+RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
