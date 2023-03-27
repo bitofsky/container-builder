@@ -49,8 +49,9 @@ RUN ln -s /usr/bin/kubectl-v1.24 /usr/bin/kubectl
 # install golang
 COPY --from=golang:1.20.2 /usr/local/go/ /usr/local/go/
 ENV GOPATH /go
-ENV PATH $GOPATH/bin:/usr/local/go/bin:${PATH}
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 
 RUN ln -s /bin/bash /usr/bin/bash && \
     ln -s /bin/sh /usr/bin/sh
+
+ENV PATH $GOPATH/bin:/usr/local/go/bin:/usr/bin:${PATH}
