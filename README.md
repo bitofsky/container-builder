@@ -13,7 +13,6 @@ Includes:
 - Moby BuildKit v0.11.4
 - kubectl v1.27 ~ v1.29 (default v1.29)
 - ts-node 10.9.2
-- ts-node-dev 2.0.0
 - @swc/core 1.4.2
 
 This container image is designed for both Node.js and Golang development. It includes a variety of packages and tools that will streamline your workflow and improve productivity.
