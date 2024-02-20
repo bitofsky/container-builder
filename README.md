@@ -8,7 +8,7 @@ Includes:
 - TSX 3.12.5
 - Golang 1.20.2
 - Docker base image: node:18.12.0-slim
-- Additional tools: software-properties-common, ca-certificates, build-essential, wget, jq, patch, awscli, python3, curl, git
+- Additional tools: software-properties-common, ca-certificates, build-essential, wget, jq, patch, awscli v2, python3, curl, git
 - genuinetools/img v0.5.11
 - Moby BuildKit v0.11.4
 - kubectl v1.20 ~ v1.26 (default v1.24)
