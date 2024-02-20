@@ -1,9 +1,10 @@
 FROM node:18.12.0-slim
 
 ENV DEBIAN_FRONTEND noninteractive
-ENV PNPM_VERSION 7.29.0
-ENV TURBO_VERSION 1.8.3
-ENV TSX_VERSION 3.12.5
+ENV PNPM_VERSION 8.15.3
+ENV TURBO_VERSION 1.12.4
+ENV TSX_VERSION 4.7.1
+ENV AWS_CLI 2.15.21
 
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends \
@@ -20,7 +21,7 @@ RUN apt-get update -y && \
     apt-get clean
 
 # install awscli v2. see https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.15.21.zip" -o /tmp/awscliv2.zip \
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI}.zip" -o /tmp/awscliv2.zip \
     && unzip /tmp/awscliv2.zip -d /tmp/ \
     && /tmp/aws/install \
     && rm /tmp/awscliv2.zip \
@@ -43,13 +44,9 @@ RUN curl -L "https://github.com/moby/buildkit/releases/download/v0.11.4/buildkit
     && rm /tmp/buildkit.tar.gz
 
 # install kubectl
-RUN curl -L "https://dl.k8s.io/release/v1.20.15/bin/linux/amd64/kubectl" -o "/usr/bin/kubectl-v1.20"
-RUN curl -L "https://dl.k8s.io/release/v1.21.14/bin/linux/amd64/kubectl" -o "/usr/bin/kubectl-v1.21"
-RUN curl -L "https://dl.k8s.io/release/v1.22.12/bin/linux/amd64/kubectl" -o "/usr/bin/kubectl-v1.22"
-RUN curl -L "https://dl.k8s.io/release/v1.23.9/bin/linux/amd64/kubectl" -o "/usr/bin/kubectl-v1.23"
-RUN curl -L "https://dl.k8s.io/release/v1.24.3/bin/linux/amd64/kubectl" -o "/usr/bin/kubectl-v1.24"
-RUN curl -L "https://dl.k8s.io/release/v1.25.7/bin/linux/amd64/kubectl" -o "/usr/bin/kubectl-v1.25"
-RUN curl -L "https://dl.k8s.io/release/v1.26.2/bin/linux/amd64/kubectl" -o "/usr/bin/kubectl-v1.26" && chmod a+x /usr/bin/kubectl*
+RUN curl -L "https://dl.k8s.io/release/v1.27.11/bin/linux/amd64/kubectl" -o "/usr/bin/kubectl-v1.27"
+RUN curl -L "https://dl.k8s.io/release/v1.28.7/bin/linux/amd64/kubectl" -o "/usr/bin/kubectl-v1.28"
+RUN curl -L "https://dl.k8s.io/release/v1.29.2/bin/linux/amd64/kubectl" -o "/usr/bin/kubectl-v1.29" && chmod a+x /usr/bin/kubectl*
 
 RUN ln -s /usr/bin/kubectl-v1.24 /usr/bin/kubectl
 
