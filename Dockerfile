@@ -4,7 +4,7 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV PNPM_VERSION 8.15.3
 ENV TURBO_VERSION 1.12.4
 ENV TSX_VERSION 4.7.1
-ENV TS_NODE_DEV 2.0.0
+ENV TS_NODE 10.9.2
 ENV SWC_CORE 1.4.2
 ENV AWS_CLI 2.15.21
 
@@ -30,7 +30,7 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI}.zip" -
     && rm -rf /tmp/aws
 
 # install node packages
-RUN npm i -g pnpm@${PNPM_VERSION} turbo@${TURBO_VERSION} tsx@${TSX_VERSION} ts-node-dev@${TS_NODE_DEV} @swc/core@${SWC_CORE}
+RUN npm i -g pnpm@${PNPM_VERSION} turbo@${TURBO_VERSION} tsx@${TSX_VERSION} ts-node@${TS_NODE} @swc/core@${SWC_CORE}
 
 # install genuinetools/img for containerize without privileged
 RUN curl -fSL "https://github.com/genuinetools/img/releases/download/v0.5.11/img-linux-amd64" -o "/usr/bin/img" \

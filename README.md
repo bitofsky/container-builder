@@ -12,6 +12,7 @@ Includes:
 - genuinetools/img v0.5.11
 - Moby BuildKit v0.11.4
 - kubectl v1.27 ~ v1.29 (default v1.29)
+- ts-node 10.9.2
 - ts-node-dev 2.0.0
 - @swc/core 1.4.2
 
