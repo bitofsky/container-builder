@@ -13,11 +13,18 @@ RUN apt-get update -y && \
         wget \
         jq \
         patch \
-        awscli \
         python3 \
         curl \
+        unzip \
         git && \
     apt-get clean
+
+# install awscli v2. see https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.15.21.zip" -o /tmp/awscliv2.zip \
+    && unzip /tmp/awscliv2.zip -d /tmp/ \
+    && /tmp/aws/install \
+    && rm /tmp/awscliv2.zip \
+    && rm -rf /tmp/aws
 
 # install node packages
 RUN npm i -g pnpm@${PNPM_VERSION} turbo@${TURBO_VERSION} tsx@${TSX_VERSION}
