@@ -3,7 +3,7 @@ Container Image for Node.js and Golang Development
 ==================================================
 Includes:
 - Node.js 18.12.0
-- PNPM 8.15.3
+- PNPM 8.6.12
 - Turbo 1.12.4
 - TSX 4.7.1
 - Golang 1.20.2
