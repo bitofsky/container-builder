@@ -7,6 +7,7 @@ ENV TSX_VERSION 4.7.1
 ENV TS_NODE 10.9.2
 ENV SWC_CORE 1.4.2
 ENV AWS_CLI 2.15.21
+ENV CRANE_VERSION v0.19.0
 
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends \
@@ -56,6 +57,9 @@ RUN ln -s /usr/bin/kubectl-v1.24 /usr/bin/kubectl
 COPY --from=golang:1.20.2 /usr/local/go/ /usr/local/go/
 ENV GOPATH /go
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
+
+# install crane
+RUN go install github.com/google/go-containerregistry/cmd/crane@${CRANE_VERSION}
 
 RUN ln -s /bin/bash /usr/bin/bash && \
     ln -s /bin/sh /usr/bin/sh
