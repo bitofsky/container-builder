@@ -8,6 +8,7 @@ ENV TS_NODE 10.9.2
 ENV SWC_CORE 1.4.15
 ENV AWS_CLI 2.15.39
 ENV BUILDKIT_VERSION 0.13.1
+ENV GO_VERSION 1.22.0
 
 RUN apt-get update -y \
  && apt-get install -y --no-install-recommends \
@@ -51,7 +52,7 @@ RUN curl -L "https://dl.k8s.io/release/v1.27.12/bin/linux/amd64/kubectl" -o "/us
 RUN ln -s /usr/bin/kubectl-v1.24 /usr/bin/kubectl
 
 # install golang
-COPY --from=golang:1.20.2 /usr/local/go/ /usr/local/go/
+COPY --from=golang:${GO_VERSION} /usr/local/go/ /usr/local/go/
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:/usr/bin:${PATH}
 

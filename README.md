@@ -44,7 +44,7 @@ Multiple versions of **kubectl** are available to suit different cluster version
 
 ### Go Programming Language
 
-- **Go**: Version 1.20.2 installed from the official golang image.
+- **Go**: Version 1.22.0 installed from the official golang image.
 
 ## Environmental Variables
 
