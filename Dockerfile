@@ -48,7 +48,7 @@ RUN curl -L "https://dl.k8s.io/release/v1.27.12/bin/linux/amd64/kubectl" -o "/us
  && curl -L "https://dl.k8s.io/release/v1.30.0/bin/linux/amd64/kubectl" -o "/usr/bin/kubectl-v1.30" \
  && chmod a+x /usr/bin/kubectl*
 
-RUN ln -s /usr/bin/kubectl-v1.24 /usr/bin/kubectl
+RUN ln -s /usr/bin/kubectl-v1.30 /usr/bin/kubectl
 
 # install golang
 COPY --from=golang:1.22.0 /usr/local/go/ /usr/local/go/
