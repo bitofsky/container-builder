@@ -7,6 +7,7 @@ ENV TSX_VERSION 4.7.2
 ENV TS_NODE 10.9.2
 ENV SWC_CORE 1.4.15
 ENV AWS_CLI 2.15.39
+ENV BUILDKIT_VERSION 0.13.1
 
 RUN apt-get update -y \
  && apt-get install -y --no-install-recommends \
@@ -32,7 +33,7 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI}.zip" -
 # install node packages
 RUN npm i -g pnpm@${PNPM_VERSION} turbo@${TURBO_VERSION} tsx@${TSX_VERSION} ts-node@${TS_NODE} @swc/core@${SWC_CORE}
 
-RUN curl -L "https://github.com/moby/buildkit/releases/download/v0.11.4/buildkit-v0.11.4.linux-amd64.tar.gz" -o /tmp/buildkit.tar.gz \
+RUN curl -L "https://github.com/moby/buildkit/releases/download/v${BUILDKIT_VERSION}/buildkit-v${BUILDKIT_VERSION}.linux-amd64.tar.gz" -o /tmp/buildkit.tar.gz \
  && mkdir -p /tmp/buildkit \
  && tar -C /tmp/buildkit -xzf /tmp/buildkit.tar.gz \
  && mv /tmp/buildkit/bin/buildctl /usr/bin/buildctl \

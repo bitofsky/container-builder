@@ -1,6 +1,6 @@
 # Docker Image Specifications
 
-This document details the versions of various packages and tools included in our Docker image.
+This document provides detailed information about the tools and packages included in our Docker image, ensuring a robust environment for development.
 
 ## Base Image
 
@@ -8,7 +8,7 @@ This document details the versions of various packages and tools included in our
 
 ## Installed Packages
 
-The following packages and tools are installed:
+Below is a list of the essential packages and tools installed in this Docker image:
 
 ### System Tools
 
@@ -31,31 +31,37 @@ The following packages and tools are installed:
 - **tsx**: Version 4.7.2
 - **ts-node**: Version 10.9.2
 - **@swc/core**: Version 1.4.15
+- **buildctl** from BuildKit: Version 0.13.1
 
 ### Kubernetes Control Binaries
 
-- **kubectl**:
-  - Version 1.27.12
-  - Version 1.28.8
-  - Version 1.29.3
-  - Version 1.30.0
+Multiple versions of **kubectl** are available to suit different cluster versions:
 
-### Additional Tools
-
-- **buildctl** from BuildKit Version 0.11.4
+- Version 1.27.12
+- Version 1.28.8
+- Version 1.29.3
+- Version 1.30.0
 
 ### Go Programming Language
 
-- **Go**: Version 1.20.2
+- **Go**: Version 1.20.2 installed from the official golang image.
+
+## Environmental Variables
+
+Configured for optimal performance and non-interactive installations:
+
+- `DEBIAN_FRONTEND`: `noninteractive`
+- `PNPM_VERSION`: `9.0.2`
+- `TURBO_VERSION`: `1.13.2`
+- `TSX_VERSION`: `4.7.2`
+- `TS_NODE`: `10.9.2`
+- `SWC_CORE`: `1.4.15`
+- `AWS_CLI`: `2.15.39`
+- `BUILDKIT_VERSION`: `0.13.1`
 
 ## Paths
 
 - **GOPATH**: `/go`
-- All Go binaries are added to PATH, ensuring easy execution of Go applications.
+- Extensive PATH configuration ensures easy access to installed binaries across the system.
 
-## Environmental Variables
-
-- `DEBIAN_FRONTEND`: `noninteractive`
-- System paths are configured to prioritize user-installed binaries.
-
-This Docker image is configured to provide a comprehensive development environment with multiple tools and languages, catering to various development needs.
+This Docker image is meticulously crafted to cater to the diverse needs of developers, encompassing a wide range of tools and languages for modern software development.
