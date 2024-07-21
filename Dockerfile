@@ -55,5 +55,9 @@ COPY --from=golang:1.22.0 /usr/local/go/ /usr/local/go/
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:/usr/bin:${PATH}
 
+# install amazon-ecr-credential-helper
+RUN curl -L "https://amazon-ecr-credential-helper-releases.s3.us-east-2.amazonaws.com/0.8.0/linux-amd64/docker-credential-ecr-login" -o "/usr/bin/docker-credential-ecr-login" \
+ && chmod a+x /usr/bin/docker-credential-ecr-login
+
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 

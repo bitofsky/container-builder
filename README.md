@@ -26,6 +26,7 @@ Below is a list of the essential packages and tools installed in this Docker ima
 ### Programming Languages and CLI Tools
 
 - **AWS CLI**: Version 2.15.39
+- **amazon-ecr-credential-helper**: Version 0.8.0
 - **pnpm**: Version 9.0.2
 - **turbo**: Version 1.13.2
 - **tsx**: Version 4.7.2
