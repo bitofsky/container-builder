@@ -1,13 +1,13 @@
-FROM node:20.12.2-slim
+FROM node:24.0.2-slim
 
 ENV DEBIAN_FRONTEND noninteractive
-ENV PNPM_VERSION 9.0.2
-ENV TURBO_VERSION 1.13.2
-ENV TSX_VERSION 4.7.2
+ENV PNPM_VERSION 10.11.0
+ENV TURBO_VERSION 2.5.3
+ENV TSX_VERSION 4.19.4
 ENV TS_NODE 10.9.2
-ENV SWC_CORE 1.4.15
-ENV AWS_CLI 2.15.39
-ENV BUILDKIT_VERSION 0.13.1
+ENV SWC_CORE 1.11.24
+ENV AWS_CLI 2.27.19
+ENV BUILDKIT_VERSION 0.21.1
 
 RUN apt-get update -y \
  && apt-get install -y --no-install-recommends \
@@ -42,13 +42,12 @@ RUN curl -L "https://github.com/moby/buildkit/releases/download/v${BUILDKIT_VERS
  && rm /tmp/buildkit.tar.gz
 
 # install kubectl
-RUN curl -L "https://dl.k8s.io/release/v1.27.12/bin/linux/amd64/kubectl" -o "/usr/bin/kubectl-v1.27" \
- && curl -L "https://dl.k8s.io/release/v1.28.8/bin/linux/amd64/kubectl" -o "/usr/bin/kubectl-v1.28" \
- && curl -L "https://dl.k8s.io/release/v1.29.3/bin/linux/amd64/kubectl" -o "/usr/bin/kubectl-v1.29" \
- && curl -L "https://dl.k8s.io/release/v1.30.0/bin/linux/amd64/kubectl" -o "/usr/bin/kubectl-v1.30" \
+RUN curl -L "https://dl.k8s.io/release/v1.30.13/bin/linux/amd64/kubectl" -o "/usr/bin/kubectl-v1.30" \
+ && curl -L "https://dl.k8s.io/release/v1.31.9/bin/linux/amd64/kubectl" -o "/usr/bin/kubectl-v1.31" \
+ && curl -L "https://dl.k8s.io/release/v1.32.5/bin/linux/amd64/kubectl" -o "/usr/bin/kubectl-v1.32" \
  && chmod a+x /usr/bin/kubectl*
 
-RUN ln -s /usr/bin/kubectl-v1.24 /usr/bin/kubectl
+RUN ln -s /usr/bin/kubectl-v1.32 /usr/bin/kubectl
 
 # install golang
 COPY --from=golang:1.22.0 /usr/local/go/ /usr/local/go/
@@ -56,7 +55,7 @@ ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:/usr/bin:${PATH}
 
 # install amazon-ecr-credential-helper
-RUN curl -L "https://amazon-ecr-credential-helper-releases.s3.us-east-2.amazonaws.com/0.8.0/linux-amd64/docker-credential-ecr-login" -o "/usr/bin/docker-credential-ecr-login" \
+RUN curl -L "https://amazon-ecr-credential-helper-releases.s3.us-east-2.amazonaws.com/0.9.1/linux-amd64/docker-credential-ecr-login" -o "/usr/bin/docker-credential-ecr-login" \
  && chmod a+x /usr/bin/docker-credential-ecr-login
 
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"

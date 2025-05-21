@@ -1,7 +1,16 @@
-##  (2022-11-02)
+## 2025-05
 
-
-
+* Upgrade Node.js base image: 20.12.2 (slim) → 24.0.2 (slim)
+* Upgrade pnpm: 9.0.2 → 10.11.0
+* Upgrade turbo: 1.13.2 → 2.5.3
+* Upgrade tsx: 4.7.2 → 4.19.4
+* Upgrade @swc/core: 1.4.15 → 1.11.24
+* Upgrade AWS CLI: 2.15.39 → 2.27.19
+* Upgrade BuildKit (buildctl): 0.13.1 → 0.21.1
+* Upgrade amazon-ecr-credential-helper: 0.8.0 → 0.9.1
+* Update kubectl versions: add 1.30.13, 1.31.9, 1.32.5; remove 1.27.12, 1.28.8, 1.29.3, 1.30.0
+* Set default kubectl symlink to v1.32
+* Continue to install Go 1.22.0 from the official golang image
 
 ## 5.1.0-20221102 (2022-11-02)
 

@@ -4,7 +4,7 @@ This document provides detailed information about the tools and packages include
 
 ## Base Image
 
-- **Node.js**: 20.12.2 (Slim version)
+- **Node.js**: 24.0.2 (Slim version)
 
 ## Installed Packages
 
@@ -25,23 +25,24 @@ Below is a list of the essential packages and tools installed in this Docker ima
 
 ### Programming Languages and CLI Tools
 
-- **AWS CLI**: Version 2.15.39
-- **amazon-ecr-credential-helper**: Version 0.8.0
-- **pnpm**: Version 9.0.2
-- **turbo**: Version 1.13.2
-- **tsx**: Version 4.7.2
+- **AWS CLI**: Version 2.27.19
+- **amazon-ecr-credential-helper**: Version 0.9.1
+- **pnpm**: Version 10.11.0
+- **turbo**: Version 2.5.3
+- **tsx**: Version 4.19.4
 - **ts-node**: Version 10.9.2
-- **@swc/core**: Version 1.4.15
-- **buildctl** from BuildKit: Version 0.13.1
+- **@swc/core**: Version 1.11.24
+- **buildctl** from BuildKit: Version 0.21.1
 
 ### Kubernetes Control Binaries
 
 Multiple versions of **kubectl** are available to suit different cluster versions:
 
-- Version 1.27.12
-- Version 1.28.8
-- Version 1.29.3
-- Version 1.30.0
+- Version 1.30.13
+- Version 1.31.9
+- Version 1.32.5
+
+The default `kubectl` symlink points to v1.32.
 
 ### Go Programming Language
 
@@ -52,13 +53,13 @@ Multiple versions of **kubectl** are available to suit different cluster version
 Configured for optimal performance and non-interactive installations:
 
 - `DEBIAN_FRONTEND`: `noninteractive`
-- `PNPM_VERSION`: `9.0.2`
-- `TURBO_VERSION`: `1.13.2`
-- `TSX_VERSION`: `4.7.2`
+- `PNPM_VERSION`: `10.11.0`
+- `TURBO_VERSION`: `2.5.3`
+- `TSX_VERSION`: `4.19.4`
 - `TS_NODE`: `10.9.2`
-- `SWC_CORE`: `1.4.15`
-- `AWS_CLI`: `2.15.39`
-- `BUILDKIT_VERSION`: `0.13.1`
+- `SWC_CORE`: `1.11.24`
+- `AWS_CLI`: `2.27.19`
+- `BUILDKIT_VERSION`: `0.21.1`
 
 ## Paths
 
