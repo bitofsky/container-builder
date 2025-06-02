@@ -50,7 +50,7 @@ RUN curl -L "https://dl.k8s.io/release/v1.30.13/bin/linux/amd64/kubectl" -o "/us
 RUN ln -s /usr/bin/kubectl-v1.32 /usr/bin/kubectl
 
 # install golang
-COPY --from=golang:1.22.0 /usr/local/go/ /usr/local/go/
+COPY --from=golang:1.24.3 /usr/local/go/ /usr/local/go/
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:/usr/bin:${PATH}
 
