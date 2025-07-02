@@ -8,6 +8,8 @@ ENV TS_NODE 10.9.2
 ENV SWC_CORE 1.11.24
 ENV AWS_CLI 2.27.19
 ENV BUILDKIT_VERSION 0.21.1
+# for running python package 
+ENV PIPX_VERSION 1.7.1 
 
 RUN apt-get update -y \
  && apt-get install -y --no-install-recommends \
@@ -60,3 +62,8 @@ RUN curl -L "https://amazon-ecr-credential-helper-releases.s3.us-east-2.amazonaw
 
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 
+# https://github.com/pypa/pipx?tab=readme-ov-file#on-linux
+RUN python3 -m pip install --user pipx=="${PIPX_VERSION}" \
+    && python3 -m pipx ensurepath \
+    # optional to allow pipx actions with --global argument
+    && pipx ensurepath --global 
