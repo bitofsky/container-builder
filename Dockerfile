@@ -9,7 +9,6 @@ ENV SWC_CORE 1.11.24
 ENV AWS_CLI 2.27.19
 ENV BUILDKIT_VERSION 0.21.1
 # for running python package 
-ENV PIPX_VERSION 1.7.1 
 
 RUN apt-get update -y \
  && apt-get install -y --no-install-recommends \
@@ -20,11 +19,15 @@ RUN apt-get update -y \
     jq \
     patch \
     python3 \
-    python3-pip \
+    pipx \
     curl \
     unzip \
     git \
  && apt-get clean
+
+ 
+# https://github.com/pypa/pipx?tab=readme-ov-file#on-linux
+RUN pipx ensurepath && pipx ensurepath 
 
 # install awscli v2. see https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI}.zip" -o /tmp/awscliv2.zip \
@@ -62,8 +65,3 @@ RUN curl -L "https://amazon-ecr-credential-helper-releases.s3.us-east-2.amazonaw
  && chmod a+x /usr/bin/docker-credential-ecr-login
 
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
-
-# https://github.com/pypa/pipx?tab=readme-ov-file#on-linux
-RUN python3 -m pip install --user pipx=="$PIPX_VERSION" \
-    && python3 -m pipx ensurepath \
-    && pipx ensurepath --global 
