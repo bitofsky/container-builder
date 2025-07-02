@@ -8,7 +8,7 @@ ENV TS_NODE 10.9.2
 ENV SWC_CORE 1.11.24
 ENV AWS_CLI 2.27.19
 ENV BUILDKIT_VERSION 0.21.1
-# for running python package 
+ENV PIPX_VERSION 1.1.0-1
 
 RUN apt-get update -y \
  && apt-get install -y --no-install-recommends \
@@ -19,7 +19,7 @@ RUN apt-get update -y \
     jq \
     patch \
     python3 \
-    pipx \
+    pipx=${PIPX_VERSION} \
     curl \
     unzip \
     git \
