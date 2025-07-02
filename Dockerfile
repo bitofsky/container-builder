@@ -20,6 +20,7 @@ RUN apt-get update -y \
     jq \
     patch \
     python3 \
+    python3-pip \
     curl \
     unzip \
     git \
