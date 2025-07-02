@@ -63,7 +63,6 @@ RUN curl -L "https://amazon-ecr-credential-helper-releases.s3.us-east-2.amazonaw
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 
 # https://github.com/pypa/pipx?tab=readme-ov-file#on-linux
-RUN python3 -m pip install --user pipx=="${PIPX_VERSION}" \
+RUN python3 -m pip install --user pipx=="$PIPX_VERSION" \
     && python3 -m pipx ensurepath \
-    # optional to allow pipx actions with --global argument
     && pipx ensurepath --global 
