@@ -27,7 +27,7 @@ RUN apt-get update -y \
 
  
 # https://github.com/pypa/pipx?tab=readme-ov-file#on-linux
-RUN pipx ensurepath && pipx ensurepath 
+RUN pipx ensurepath
 
 # install awscli v2. see https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI}.zip" -o /tmp/awscliv2.zip \
