@@ -61,4 +61,5 @@ RUN curl -L "https://amazon-ecr-credential-helper-releases.s3.us-east-2.amazonaw
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 
 # install uv
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+# https://docs.astral.sh/uv/reference/installer/#unmanaged-installations
+RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_UNMANAGED_INSTALL="/usr/bin" sh
