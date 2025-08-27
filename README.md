@@ -46,7 +46,7 @@ The default `kubectl` symlink points to v1.32.
 
 ### Go Programming Language
 
-- **Go**: Version 1.22.0 installed from the official golang image.
+- **Go**: Version 1.24.3 installed from the official golang image.
 
 ## Environmental Variables
 
