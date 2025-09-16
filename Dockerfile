@@ -6,6 +6,7 @@ RUN apk update \
  && apk add --no-cache \
     ca-certificates \
     build-base \
+    bash \
     wget \
     jq \
     patch \
