@@ -1,0 +1,98 @@
+#!/bin/sh -e
+
+add_docker_tag() {
+    local IMAGE_PATH="$1"
+    local NEW_TAG="$2"
+    local USERNAME="$3"
+    local PASSWORD="$4"
+
+    local REGISTRY_URL="https://$(echo $IMAGE_PATH | cut -d'/' -f1)"
+    local REPO_PATH=$(echo $IMAGE_PATH | cut -d'/' -f2- | cut -d':' -f1)
+    local CURRENT_TAG=$(echo $IMAGE_PATH | cut -d':' -f2)
+    
+    # 붙일 태그가 없으면 에러
+    if [[ -z "$CURRENT_TAG" ]]; then
+        echo "Error: Current tag not found in image path '$IMAGE_PATH'"
+        return 1
+    fi
+
+    if [[ -z "$NEW_TAG" ]]; then
+        echo "Error: New tag is empty"
+        return 1
+    fi
+
+    echo "Start tagging: $REGISTRY_URL/$REPO_PATH, $CURRENT_TAG -> $NEW_TAG"
+
+    # 인증 헤더 설정
+    local AUTH_HEADER=""
+    if [[ -n "$USERNAME" && -n "$PASSWORD" ]]; then
+        AUTH_HEADER="Authorization: Basic $(echo -n "$USERNAME:$PASSWORD" | base64)"
+    fi
+
+    local MANIFEST=$(curl -s -H "Accept: application/vnd.docker.distribution.manifest.v2+json" -H "$AUTH_HEADER" "$REGISTRY_URL/v2/$REPO_PATH/manifests/$CURRENT_TAG")
+
+    if [[ $? -ne 0 ]]; then
+        echo "Error: Failed to fetch manifest for tag '$CURRENT_TAG'"
+        return 1
+    fi
+     
+    echo "Adding new tag '$NEW_TAG'..."
+    local RESULT=$(curl -s -X PUT \
+        -H "Content-Type: application/vnd.docker.distribution.manifest.v2+json" \
+        -H "$AUTH_HEADER" \
+        -d "$MANIFEST" \
+        "$REGISTRY_URL/v2/$REPO_PATH/manifests/$NEW_TAG")
+
+    if [[ $? -ne 0 ]]; then
+        echo "Error: Failed to add tag '$NEW_TAG': $RESULT"
+        return 1
+    fi
+    
+    echo "Successfully added tag '$NEW_TAG' to $IMAGE_PATH"
+}
+
+
+TAG_TO_ADD=$1
+DOCKER_REGISTRY=$2
+TOKEN=$3
+
+if [ -z "$TAG_TO_ADD" ] || [ -z "$DOCKER_REGISTRY" ]; then
+    echo "Usage: echo -e 'image1\\nimage2\\nimage3' | $0 <tag_to_add> <docker_registry> [token]"
+    exit 1
+fi
+
+# stdin에서 이미지 목록을 배열로 읽기
+mapfile -t IMAGES
+
+if [ ${#IMAGES[@]} -eq 0 ]; then
+    echo "Error: No images found"
+    exit 1
+fi
+
+# if ECR
+if [[ "$DOCKER_REGISTRY" == *".dkr.ecr."* ]]; then
+    TOKEN=$(aws ecr get-login-password --region us-east-1)
+fi
+
+if [[ -z "$TOKEN" && "$DOCKER_REGISTRY" == *".dkr.ecr."* ]]; then
+    echo "Token is empty"
+    exit 1
+fi
+
+for IMAGE in "${IMAGES[@]}"; do
+    if [[ $IMAGE != *"$DOCKER_REGISTRY"* ]]; then
+        echo "Skipping: $IMAGE (not from $DOCKER_REGISTRY)"
+        continue
+    fi
+
+    if [[ $IMAGE == *".dkr.ecr."* ]]; then
+        USERNAME="AWS"
+    else
+        USERNAME=$(echo "$IMAGE" | cut -d'/' -f1)
+    fi
+
+    echo "add_docker_tag $IMAGE $TAG_TO_ADD $USERNAME ****"
+    add_docker_tag "$IMAGE" "$TAG_TO_ADD" "$USERNAME" "$TOKEN" &
+done
+wait
+
