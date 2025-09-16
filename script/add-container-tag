@@ -61,14 +61,6 @@ if [ -z "$TAG_TO_ADD" ] || [ -z "$DOCKER_REGISTRY" ]; then
     exit 1
 fi
 
-# stdin에서 이미지 목록을 배열로 읽기
-mapfile -t IMAGES
-
-if [ ${#IMAGES[@]} -eq 0 ]; then
-    echo "Error: No images found"
-    exit 1
-fi
-
 # if ECR
 if [[ "$DOCKER_REGISTRY" == *".dkr.ecr."* ]]; then
     TOKEN=$(aws ecr get-login-password --region us-east-1)
@@ -76,6 +68,17 @@ fi
 
 if [[ -z "$TOKEN" && "$DOCKER_REGISTRY" == *".dkr.ecr."* ]]; then
     echo "Token is empty"
+    exit 1
+fi
+
+# stdin에서 이미지 목록을 배열로 읽기
+IMAGES=()
+while IFS= read -r line; do
+    IMAGES+=("$line")
+done
+
+if [ ${#IMAGES[@]} -eq 0 ]; then
+    echo "Error: No images found"
     exit 1
 fi
 
