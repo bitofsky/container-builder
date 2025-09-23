@@ -28,7 +28,7 @@ add_docker_tag() {
 
     local AUTH_OPTS=""
     if [[ -n "$USERNAME" && -n "$PASSWORD" ]]; then
-        echo "Using provided credentials for authentication: user=$USERNAME password=$PASSWORD"
+        echo "Using provided credentials for authentication: user=$USERNAME"
         AUTH_OPTS="--src-creds $USERNAME:$PASSWORD --dest-creds $USERNAME:$PASSWORD"
     fi
 
