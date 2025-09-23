@@ -1,0 +1,92 @@
+#!/bin/bash -e
+
+add_docker_tag() {
+    local IMAGE_PATH="$1"
+    local NEW_TAG="$2"
+    local USERNAME="$3"
+    local PASSWORD="$4"
+
+    local REGISTRY_URL=$(echo $IMAGE_PATH | cut -d'/' -f1)
+    local REPO_PATH=$(echo $IMAGE_PATH | cut -d'/' -f2- | cut -d':' -f1)
+    local CURRENT_TAG=$(echo $IMAGE_PATH | cut -d':' -f2)
+    
+    # 붙일 태그가 없으면 에러
+    if [[ -z "$CURRENT_TAG" ]]; then
+        echo "Error: Current tag not found in image path '$IMAGE_PATH'"
+        return 1
+    fi
+
+    if [[ -z "$NEW_TAG" ]]; then
+        echo "Error: New tag is empty"
+        return 1
+    fi
+
+    echo "Start tagging: $REGISTRY_URL/$REPO_PATH, $CURRENT_TAG -> $NEW_TAG"
+
+    local SOURCE_IMAGE="docker://$REGISTRY_URL/$REPO_PATH:$CURRENT_TAG"
+    local DEST_IMAGE="docker://$REGISTRY_URL/$REPO_PATH:$NEW_TAG"
+
+    local AUTH_OPTS=""
+    if [[ -n "$USERNAME" && -n "$PASSWORD" ]]; then
+        echo "Using provided credentials for authentication: user=$USERNAME password=$PASSWORD"
+        AUTH_OPTS="--src-creds $USERNAME:$PASSWORD --dest-creds $USERNAME:$PASSWORD"
+    fi
+
+    echo "Adding new tag '$NEW_TAG'..."
+    
+    if skopeo copy $AUTH_OPTS "$SOURCE_IMAGE" "$DEST_IMAGE"; then
+        echo "Successfully added tag '$NEW_TAG' to $IMAGE_PATH"
+        return 0
+    else
+        echo "Error: Failed to add tag '$NEW_TAG'"
+        return 1
+    fi
+}
+
+
+TAG_TO_ADD=$1
+DOCKER_REGISTRY=$2
+TOKEN=$3
+
+if [ -z "$TAG_TO_ADD" ] || [ -z "$DOCKER_REGISTRY" ]; then
+    echo "Usage: echo -e 'image1\\nimage2\\nimage3' | $0 <tag_to_add> <docker_registry> [token]"
+    exit 1
+fi
+
+# if ECR
+if [[ "$DOCKER_REGISTRY" == *".dkr.ecr."* ]]; then
+    USERNAME="AWS"
+    PASSWORD=$(aws ecr get-login-password --region us-east-1)
+else
+    USERNAME=$(echo "$TOKEN" | base64 -d | cut -d: -f1)
+    PASSWORD=$(echo "$TOKEN" | base64 -d | cut -d: -f2)
+fi
+
+if [[ -z "$PASSWORD" && "$DOCKER_REGISTRY" == *".dkr.ecr."* ]]; then
+    echo "Error: ECR token is required for ECR registry"
+    exit 1
+fi
+
+if [[ -z "$TOKEN" ]]; then
+    echo "Error: Token is required for non-ECR registry"
+    exit 1
+fi
+
+# stdin에서 이미지 목록을 배열로 읽기
+mapfile -t IMAGES
+if [ ${#IMAGES[@]} -eq 0 ]; then
+    echo "Error: No images found"
+    exit 1
+fi
+
+for IMAGE in "${IMAGES[@]}"; do
+    if [[ $IMAGE != *"$DOCKER_REGISTRY"* ]]; then
+        echo "Skipping: $IMAGE (not from $DOCKER_REGISTRY)"
+        continue
+    fi
+
+    echo "add_docker_tag $IMAGE $TAG_TO_ADD $USERNAME"
+    add_docker_tag "$IMAGE" "$TAG_TO_ADD" "$USERNAME" "$PASSWORD" &
+done
+wait
+
