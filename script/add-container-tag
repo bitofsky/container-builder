@@ -57,19 +57,17 @@ fi
 if [[ "$DOCKER_REGISTRY" == *".dkr.ecr."* ]]; then
     USERNAME="AWS"
     PASSWORD=$(aws ecr get-login-password --region us-east-1)
+    if [ -z "$PASSWORD" ]; then
+        echo "Error: Failed to get ECR login password"
+        exit 1
+    fi
 else
+    if [ -z "$TOKEN" ]; then
+        echo "Error: Token is required for non-ECR registry"
+        exit 1
+    fi
     USERNAME=$(echo "$TOKEN" | base64 -d | cut -d: -f1)
     PASSWORD=$(echo "$TOKEN" | base64 -d | cut -d: -f2)
-fi
-
-if [[ -z "$PASSWORD" && "$DOCKER_REGISTRY" == *".dkr.ecr."* ]]; then
-    echo "Error: ECR token is required for ECR registry"
-    exit 1
-fi
-
-if [[ -z "$TOKEN" ]]; then
-    echo "Error: Token is required for non-ECR registry"
-    exit 1
 fi
 
 # stdin에서 이미지 목록을 배열로 읽기
