@@ -12,6 +12,8 @@ RUN apk update \
     patch \
     curl \
     unzip \
-    aws-cli=${AWS_CLI} 
+    aws-cli=${AWS_CLI} \
+    # docker cli tool
+    skopeo 
 
 COPY script /script

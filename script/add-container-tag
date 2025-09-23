@@ -6,7 +6,7 @@ add_docker_tag() {
     local USERNAME="$3"
     local PASSWORD="$4"
 
-    local REGISTRY_URL="https://$(echo $IMAGE_PATH | cut -d'/' -f1)"
+    local REGISTRY_URL=$(echo $IMAGE_PATH | cut -d'/' -f1)
     local REPO_PATH=$(echo $IMAGE_PATH | cut -d'/' -f2- | cut -d':' -f1)
     local CURRENT_TAG=$(echo $IMAGE_PATH | cut -d':' -f2)
     
@@ -23,32 +23,24 @@ add_docker_tag() {
 
     echo "Start tagging: $REGISTRY_URL/$REPO_PATH, $CURRENT_TAG -> $NEW_TAG"
 
-    # 인증 헤더 설정
-    local AUTH_HEADER=""
+    local SOURCE_IMAGE="docker://$REGISTRY_URL/$REPO_PATH:$CURRENT_TAG"
+    local DEST_IMAGE="docker://$REGISTRY_URL/$REPO_PATH:$NEW_TAG"
+
+    local AUTH_OPTS=""
     if [[ -n "$USERNAME" && -n "$PASSWORD" ]]; then
-        AUTH_HEADER="Authorization: Basic $(echo -n "$USERNAME:$PASSWORD" | base64)"
+        echo "Using provided credentials for authentication: user=$USERNAME password=$PASSWORD"
+        AUTH_OPTS="--src-creds $USERNAME:$PASSWORD --dest-creds $USERNAME:$PASSWORD"
     fi
 
-    local MANIFEST=$(curl -s -H "Accept: application/vnd.docker.distribution.manifest.v2+json" -H "$AUTH_HEADER" "$REGISTRY_URL/v2/$REPO_PATH/manifests/$CURRENT_TAG")
-
-    if [[ $? -ne 0 ]]; then
-        echo "Error: Failed to fetch manifest for tag '$CURRENT_TAG'"
-        return 1
-    fi
-     
     echo "Adding new tag '$NEW_TAG'..."
-    local RESULT=$(curl -s -X PUT \
-        -H "Content-Type: application/vnd.docker.distribution.manifest.v2+json" \
-        -H "$AUTH_HEADER" \
-        -d "$MANIFEST" \
-        "$REGISTRY_URL/v2/$REPO_PATH/manifests/$NEW_TAG")
-
-    if [[ $? -ne 0 ]]; then
-        echo "Error: Failed to add tag '$NEW_TAG': $RESULT"
+    
+    if skopeo copy $AUTH_OPTS "$SOURCE_IMAGE" "$DEST_IMAGE"; then
+        echo "Successfully added tag '$NEW_TAG' to $IMAGE_PATH"
+        return 0
+    else
+        echo "Error: Failed to add tag '$NEW_TAG'"
         return 1
     fi
-    
-    echo "Successfully added tag '$NEW_TAG' to $IMAGE_PATH"
 }
 
 
@@ -63,20 +55,25 @@ fi
 
 # if ECR
 if [[ "$DOCKER_REGISTRY" == *".dkr.ecr."* ]]; then
-    TOKEN=$(aws ecr get-login-password --region us-east-1)
+    USERNAME="AWS"
+    PASSWORD=$(aws ecr get-login-password --region us-east-1)
+else
+    USERNAME=$(echo "$TOKEN" | base64 -d | cut -d: -f1)
+    PASSWORD=$(echo "$TOKEN" | base64 -d | cut -d: -f2)
 fi
 
-if [[ -z "$TOKEN" && "$DOCKER_REGISTRY" == *".dkr.ecr."* ]]; then
-    echo "Token is empty"
+if [[ -z "$PASSWORD" && "$DOCKER_REGISTRY" == *".dkr.ecr."* ]]; then
+    echo "Error: ECR token is required for ECR registry"
+    exit 1
+fi
+
+if [[ -z "$TOKEN" ]]; then
+    echo "Error: Token is required for non-ECR registry"
     exit 1
 fi
 
 # stdin에서 이미지 목록을 배열로 읽기
-IMAGES=()
-while IFS= read -r line; do
-    IMAGES+=("$line")
-done
-
+mapfile -t IMAGES
 if [ ${#IMAGES[@]} -eq 0 ]; then
     echo "Error: No images found"
     exit 1
@@ -88,14 +85,8 @@ for IMAGE in "${IMAGES[@]}"; do
         continue
     fi
 
-    if [[ $IMAGE == *".dkr.ecr."* ]]; then
-        USERNAME="AWS"
-    else
-        USERNAME=$(echo "$IMAGE" | cut -d'/' -f1)
-    fi
-
-    echo "add_docker_tag $IMAGE $TAG_TO_ADD $USERNAME ****"
-    add_docker_tag "$IMAGE" "$TAG_TO_ADD" "$USERNAME" "$TOKEN" &
+    echo "add_docker_tag $IMAGE $TAG_TO_ADD $USERNAME"
+    add_docker_tag "$IMAGE" "$TAG_TO_ADD" "$USERNAME" "$PASSWORD" &
 done
 wait
 
