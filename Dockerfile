@@ -24,6 +24,9 @@ RUN apt-get update -y \
     skopeo \
  && apt-get clean
 
+# copy script for building and publishing container images
+COPY script /script
+
 # install awscli v2. see https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI}.zip" -o /tmp/awscliv2.zip \
  && unzip /tmp/awscliv2.zip -d /tmp/ \
