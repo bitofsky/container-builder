@@ -28,7 +28,7 @@ Below is a list of the essential packages and tools installed in this Docker ima
 - **AWS CLI**: Version 2.27.19
 - **amazon-ecr-credential-helper**: Version 0.9.1
 - **pnpm**: Version 10.11.0
-- **turbo**: Version 2.5.3
+- **turbo**: Version 2.5.8
 - **tsx**: Version 4.19.4
 - **ts-node**: Version 10.9.2
 - **@swc/core**: Version 1.11.24
@@ -54,7 +54,7 @@ Configured for optimal performance and non-interactive installations:
 
 - `DEBIAN_FRONTEND`: `noninteractive`
 - `PNPM_VERSION`: `10.11.0`
-- `TURBO_VERSION`: `2.5.3`
+- `TURBO_VERSION`: `2.5.8`
 - `TSX_VERSION`: `4.19.4`
 - `TS_NODE`: `10.9.2`
 - `SWC_CORE`: `1.11.24`

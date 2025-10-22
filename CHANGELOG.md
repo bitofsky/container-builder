@@ -1,3 +1,7 @@
+## 2025-10
+
+* Upgrade turbo: 2.5.3 -> 2.5.8
+
 ## 2025-05
 
 * Upgrade Node.js base image: 20.12.2 (slim) → 24.0.2 (slim)
