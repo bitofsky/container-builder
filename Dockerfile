@@ -67,3 +67,9 @@ RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 # install uv
 # https://docs.astral.sh/uv/reference/installer/#unmanaged-installations
 RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_UNMANAGED_INSTALL="/usr/bin" sh
+
+# install rust via rustup
+# https://www.rust-lang.org/tools/install
+ENV RUST_VERSION 1.91.1
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain ${RUST_VERSION} --profile minimal \
+ && ln -s /root/.cargo/bin/* /usr/bin/
