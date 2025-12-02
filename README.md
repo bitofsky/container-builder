@@ -48,6 +48,10 @@ The default `kubectl` symlink points to v1.32.
 
 - **Go**: Version 1.22.0 installed from the official golang image.
 
+### Rust Programming Language
+
+- **Rust**: Version 1.91.1 installed via rustup with minimal profile (includes `rustc`, `cargo`, `rustup`).
+
 ## Environmental Variables
 
 Configured for optimal performance and non-interactive installations:
@@ -60,6 +64,7 @@ Configured for optimal performance and non-interactive installations:
 - `SWC_CORE`: `1.11.24`
 - `AWS_CLI`: `2.27.19`
 - `BUILDKIT_VERSION`: `0.21.1`
+- `RUST_VERSION`: `1.91.1`
 
 ## Paths
 

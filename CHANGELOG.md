@@ -1,3 +1,7 @@
+## 2025-12
+
+* Add Rust 1.91.1 via rustup with minimal profile
+
 ## 2025-10
 
 * Upgrade turbo: 2.5.3 -> 2.5.8
