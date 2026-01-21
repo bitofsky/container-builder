@@ -1,13 +1,13 @@
-FROM node:24.0.2-slim
+FROM node:24.13.0-slim
 
 ENV DEBIAN_FRONTEND noninteractive
-ENV PNPM_VERSION 10.11.0
-ENV TURBO_VERSION 2.5.8
+ENV PNPM_VERSION 10.28.1
+ENV TURBO_VERSION 2.7.5
 ENV TSX_VERSION 4.19.4
 ENV TS_NODE 10.9.2
-ENV SWC_CORE 1.11.24
+ENV SWC_CORE 1.15.10
 ENV AWS_CLI 2.27.19
-ENV BUILDKIT_VERSION 0.21.1
+ENV BUILDKIT_VERSION 0.26.3
 
 RUN apt-get update -y \
  && apt-get install -y --no-install-recommends \
@@ -54,12 +54,12 @@ RUN curl -L "https://dl.k8s.io/release/v1.30.13/bin/linux/amd64/kubectl" -o "/us
 RUN ln -s /usr/bin/kubectl-v1.32 /usr/bin/kubectl
 
 # install golang
-COPY --from=golang:1.22.0 /usr/local/go/ /usr/local/go/
+COPY --from=golang:1.25.6 /usr/local/go/ /usr/local/go/
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:/usr/bin:${PATH}
 
 # install amazon-ecr-credential-helper
-RUN curl -L "https://amazon-ecr-credential-helper-releases.s3.us-east-2.amazonaws.com/0.9.1/linux-amd64/docker-credential-ecr-login" -o "/usr/bin/docker-credential-ecr-login" \
+RUN curl -L "https://amazon-ecr-credential-helper-releases.s3.us-east-2.amazonaws.com/0.11.0/linux-amd64/docker-credential-ecr-login" -o "/usr/bin/docker-credential-ecr-login" \
  && chmod a+x /usr/bin/docker-credential-ecr-login
 
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
@@ -70,6 +70,6 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_UNMANAGED_INSTALL="/usr/
 
 # install rust via rustup
 # https://www.rust-lang.org/tools/install
-ENV RUST_VERSION 1.91.1
+ENV RUST_VERSION 1.92.0
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain ${RUST_VERSION} --profile default \
  && ln -s /root/.cargo/bin/* /usr/bin/

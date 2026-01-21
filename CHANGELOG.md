@@ -1,3 +1,14 @@
+## 2026-01
+
+* Upgrade Node.js base image: 24.0.2 (slim) → 24.13.0 (slim)
+* Upgrade pnpm: 10.11.0 → 10.28.1
+* Upgrade turbo: 2.5.8 → 2.7.5
+* Upgrade @swc/core: 1.11.24 → 1.15.10
+* Upgrade BuildKit (buildctl): 0.21.1 → 0.26.3
+* Upgrade go: 1.22.0 → 1.25.6
+* Upgrade amazon-ecr-credential-helper: 0.9.1 → 0.11.0
+* Upgrade rust: 1.91.1 → 1.92.0
+
 ## 2025-12
 
 * Add Rust 1.91.1 via rustup with minimal profile
