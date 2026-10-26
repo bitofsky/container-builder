@@ -1,6 +1,12 @@
 ## 2026-10
 
 * Upgrade Node.js base image: 24.13.0 (slim) -> 24.22.1 (slim) for CVE-2026-111497 (Brotli decoder out-of-bounds write)
+* Align tool versions with PGS pins (package.json, go.mod, apps/tool/dev/Dockerfile, bin/install-buildkit):
+  * pnpm: 10.28.1 -> 10.11.0
+  * turbo: 2.7.5 -> 2.10.12
+  * go: 1.25.6 -> 1.26.0
+  * rust: 1.92.0 -> 1.91.1
+  * BuildKit (buildctl): 0.26.3 -> 0.21.1
 
 ## 2026-01
 
