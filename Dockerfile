@@ -1,4 +1,4 @@
-FROM node:24.13.0-slim
+FROM node:24.22.1-slim
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV PNPM_VERSION 10.28.1

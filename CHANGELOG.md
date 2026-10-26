@@ -1,3 +1,7 @@
+## 2026-10
+
+* Upgrade Node.js base image: 24.13.0 (slim) -> 24.22.1 (slim) for CVE-2026-111497 (Brotli decoder out-of-bounds write)
+
 ## 2026-01
 
 * Upgrade Node.js base image: 24.0.2 (slim) → 24.13.0 (slim)
